@@ -71,7 +71,7 @@ Deux raisons. Déjà, si la longueur est différente, ça sert à rien de
 comparer caractère par caractère, on va plus vite. Et en plus ça évite de
 lire trop loin dans le buffer si quelqu'un tape un truc trop long. C'est
 un petit réflexe de sécurité qu'on prend :
-[https://stackoverflow.com/questions/19927587/strcmp-implementation-check-length-first](https://stackoverflow.com/questions/19927587/strcmp-implementation-check-length-first)
+[https://stackoverflow.com/questions/32848990/how-do-i-compare-two-strings-in-assembly-nasm](https://stackoverflow.com/questions/32848990/how-do-i-compare-two-strings-in-assembly-nasm)
 
 ### Le default rel
 
