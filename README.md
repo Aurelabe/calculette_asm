@@ -14,3 +14,4 @@ Dans le code, je vérifie la longueur du mot de passe avant comparer parce que d
 lire trop loin dans le buffer si quelqu'un tape un truc trop long.
 
 ### debug
+<img width="572" height="360" alt="image" src="https://github.com/user-attachments/assets/0f70b2ea-6204-4e49-a878-44bd74720841" />
