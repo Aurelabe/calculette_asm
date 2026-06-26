@@ -1,6 +1,6 @@
 # Calculatrice confidentielle 
 
-## v1 : mot de passe
+## V1 : mot de passe
 
 On demande au user de rentrer un mot de passe. Pour la v1 il n'y a que ça. 
 Le mot de passe est "asm42", si le mot de passe entré est bon le programme affiche
