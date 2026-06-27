@@ -89,18 +89,33 @@ Les fonctions `lire_entier` et `afficher_entier` existent toujours, mais `lire_d
 `afficher_float` convertit un double en chaîne : partie entière avec la même technique que `afficher_entier` (divisions par 10), puis partie fractionnaire avec 6 décimales en multipliant par 10 à chaque étape.
 Les zéros de fin sont supprimés, sauf si le nombre est un entier (ex: "10" au lieu de "10.000000").
 
-### 7.3. Pourquoi -2.299999 au lieu de -2.3 ?
-
-Certains nombres comme 3.2 ne tombent pas juste en binaire (comme 1/3 = 0.333... en décimal). Le processeur stocke l'approximation la plus proche, et quand on affiche, on voit parfois un tout petit écart.
-
-### 7.4. Tests
+### 7.3. Tests
 <!-- screenshot placeholder v7 -->
 
 ## 8. Sécurité
 
-Ce programme n'est pas sécurisé, c'est juste un projet pédagogique.
+### 8.1. Buffer overflow évité
 
-- Le mot de passe est stocké en clair dans le binaire (`strings calc` le montre)
-- Le buffer de saisie est limité à 62 caractères (débordement évité dans `read_line`)
-- 3 tentatives max, puis le programme se verrouille
-- Pas de chiffrement, pas de hash, rien de sérieux
+`read_line` lit un seul byte à la fois avec `syscall read` et s'arrête à 62 caractères (`cmp r8, 62`) pour ne pas dépasser le buffer de 64 octets. Si l'utilisateur tape plus de 62 caractères, le reste est ignoré.
+
+https://stackoverflow.com/questions/23497730/how-to-prevent-buffer-overflow-in-assembly
+
+### 8.2. Validation des entrées
+
+- **Mot de passe** : on compare d'abord la longueur (`cmp rax, secret_len`), puis caractère par caractère. Si la longueur diffère, on ne lit pas plus loin que le buffer.
+- **Menu** : rejeté si longueur ≠ 1 ou si le caractère n'est pas entre '1' et '5'.
+- **Nombres** : chaque caractère est vérifié (`cmp rdx, '0'` / `cmp rdx, '9'`). Si invalide, affiche "Saisie invalide." et redemande.
+
+### 8.3. Division par zéro
+
+Avant `idiv`, on teste `cmp qword [nb2], 0`. Sans cette vérification, `idiv` avec un diviseur nul provoque une exception matérielle (SIGFPE) et le programme est tué par le système.
+
+### 8.4. Limitation des tentatives
+
+Le compteur `max_att` (= 3) empêche de tester indéfiniment le mot de passe. Après 3 échecs, le programme affiche "Programme verrouillé." et se termine avec `syscall exit`.
+
+### 8.5. Ce qui n'est PAS sécurisé
+
+- Le mot de passe est en clair dans le binaire (`strings calc` le montre), pas de hash ni de chiffrement.
+- Pas de protection contre les side-channel attacks (timing de la comparaison caractère par caractère).
+- C'est un projet pédagogique, pas un vrai système d'authentification.
