@@ -64,4 +64,5 @@ Le résultat est la partie entière du quotient.
 Gestion de la division par zéro avec un message "Division par zero."
 
 ### 6.1. Tests
-<!-- screenshot placeholder v6 -->
+
+<img width="402" height="631" alt="image" src="https://github.com/user-attachments/assets/063500ff-37a6-4729-a626-d803ed42d344" />
