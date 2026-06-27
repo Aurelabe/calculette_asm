@@ -66,32 +66,8 @@ Si oui, on affiche "Division par zéro impossible." au lieu de lancer l'instruct
 
 ### 6.1. Pourquoi vérifier la division par zéro ?
 
-`idiv` avec un diviseur à 0 provoque une interruption matérielle (erreur de division) et le système tue le programme. En vérifiant avant, on évite le crash.
+Déjà, on sait que la division par zéro est impossible. `idiv`, avec un diviseur à 0 provoque une interruption matérielle (erreur de division) et le système tue le programme. En vérifiant avant, on évite le crash.
 
 ### 6.2. Tests
 
-<img width="402" height="631" alt="image" src="https://github.com/user-attachments/assets/063500ff-37a6-4729-a626-d803ed42d344" />
-
-- 20 / 3 → 6 (division entière, pas de virgule)
-- 10 / 0 → "Division par zéro impossible."
-
-## 7. v7 : flottants
-
-Maintenant la calculatrice gère les nombres à virgule (double précision, SSE2).
-Les fonctions `lire_entier` et `afficher_entier` existent toujours, mais `lire_deux_nombres` utilise les versions flottantes.
-
-### 7.1. lire_float
-
-`lire_float` lit une chaîne, sépare la partie entière et la partie fractionnaire après le '.', et combine les deux en double avec `cvtsi2sd` + `divsd`.
-
-### 7.2. afficher_float
-
-`afficher_float` convertit un double en chaîne : partie entière avec la même technique que `afficher_entier` (divisions par 10), puis partie fractionnaire avec 6 décimales en multipliant par 10 à chaque étape.
-Les zéros de fin sont supprimés, sauf si le nombre est un entier (ex: "10" au lieu de "10.000000").
-
-### 7.3. Pourquoi -2.299999 au lieu de -2.3 ?
-
-Certains nombres comme 3.2 ne tombent pas juste en binaire (comme 1/3 = 0.333... en décimal). Le processeur stocke l'approximation la plus proche, et quand on affiche, on voit parfois un tout petit écart.
-
-### 7.4. Tests
-<!-- screenshot placeholder v7 -->
+<img width="516" height="626" alt="image" src="https://github.com/user-attachments/assets/71ff712a-2c01-4766-9eaa-4ac1d5b9081b" />
