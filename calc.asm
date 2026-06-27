@@ -430,7 +430,7 @@ afficher_float:
     mov r8, 6
 .frac_loop:
     mulsd xmm1, [dix]
-    cvttsd2si rax, xmm1
+    cvtsd2si rax, xmm1
     cvtsi2sd xmm2, rax
     subsd xmm1, xmm2
     add al, '0'
