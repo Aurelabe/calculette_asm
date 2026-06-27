@@ -72,9 +72,6 @@ Déjà, on sait que la division par zéro est impossible. `idiv`, avec un divise
 
 <img width="516" height="626" alt="image" src="https://github.com/user-attachments/assets/71ff712a-2c01-4766-9eaa-4ac1d5b9081b" />
 
-- 20 / 3 → 6 (division entière, pas de virgule)
-- 10 / 0 → "Division par zéro impossible."
-
 ## 7. v7 : flottants
 
 Maintenant la calculatrice gère les nombres à virgule (double précision, SSE2).
@@ -89,9 +86,6 @@ Les fonctions `lire_entier` et `afficher_entier` existent toujours, mais `lire_d
 `afficher_float` convertit un double en chaîne : partie entière avec la même technique que `afficher_entier` (divisions par 10), puis partie fractionnaire avec 6 décimales en multipliant par 10 à chaque étape.
 Les zéros de fin sont supprimés, sauf si le nombre est un entier (ex: "10" au lieu de "10.000000").
 
-### 7.3. Pourquoi -2.299999 au lieu de -2.3 ?
+### 7.3. Tests
 
-Certains nombres comme 3.2 ne tombent pas juste en binaire (comme 1/3 = 0.333... en décimal). Le processeur stocke l'approximation la plus proche, et quand on affiche, on voit parfois un tout petit écart.
-
-### 7.4. Tests
-<!-- screenshot placeholder v7 -->
+<img width="382" height="622" alt="image" src="https://github.com/user-attachments/assets/5fe0009a-f014-40d7-83cd-bd8c372828bf" />
