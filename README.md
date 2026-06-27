@@ -49,11 +49,9 @@ La soustraction utilise `sub rax, [nb2]` pour soustraire le deuxième nombre du 
 
 <img width="431" height="617" alt="image" src="https://github.com/user-attachments/assets/ecaecff3-ddc3-41f6-bfac-6c88456cfdcc" />
 
-## 5. v5 : multiplication + division
+## 5. v5 : multiplication
 
-La multiplication utilise `imul rax, [nb2]` (multiplication signée).  
-La division utilise `cqo` puis `idiv qword [nb2]` (division signée).  
-Gestion de la division par zéro avec un message "Division par zero."
+La multiplication utilise `imul rax, [nb2]` (multiplication signée).
 
 ### 5.1. Tests
 <!-- screenshot placeholder v5 -->
