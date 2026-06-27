@@ -109,9 +109,3 @@ Avant `idiv`, on teste `cmp qword [nb2], 0`. Sans cette vérification, `idiv` av
 ### 8.4. Limitation des tentatives
 
 Le compteur `max_att` (= 3) empêche de tester indéfiniment le mot de passe. Après 3 échecs, le programme affiche "Programme verrouillé." et se termine avec `syscall exit`.
-
-### 8.5. Ce qui n'est PAS sécurisé
-
-- Le mot de passe est en clair dans le binaire (`strings calc` le montre), pas de hash ni de chiffrement.
-- Pas de protection contre les side-channel attacks (timing de la comparaison caractère par caractère).
-- C'est un projet pédagogique, pas un vrai système d'authentification.
