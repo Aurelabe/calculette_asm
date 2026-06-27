@@ -38,4 +38,5 @@ L'addition prend les 2 nombres, les additionne et affiche le résultat avec `add
 Les autres opérations (soustraction, multiplication, division) arrivent dans les versions suivantes.
 
 ### 3.1. Tests
-<!-- screenshot placeholder v3 -->
+
+<img width="377" height="622" alt="image" src="https://github.com/user-attachments/assets/1b9b28e1-1b69-4cd3-9c5a-ca569ae2a1f6" />
