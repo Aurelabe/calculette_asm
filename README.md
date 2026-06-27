@@ -61,7 +61,13 @@ La multiplication utilise `imul rax, [nb2]` (multiplication signée).
 
 La division utilise `cqo` (sign-extension) puis `idiv qword [nb2]` (division signée).
 Le résultat est la partie entière du quotient.
-Gestion de la division par zéro avec un message "Division par zero."
+Avant de diviser, on vérifie si nb2 vaut 0 avec `cmp qword [nb2], 0` / `je .div_zero`.
+Si oui, on affiche "Division par zéro impossible." au lieu de lancer l'instruction `idiv` qui ferait planter le programme (signal SIGFPE).
 
-### 6.1. Tests
-<!-- screenshot placeholder v6 -->
+### 6.1. Pourquoi vérifier la division par zéro ?
+
+`idiv` avec un diviseur à 0 provoque une interruption matérielle (erreur de division) et le système tue le programme. En vérifiant avant, on évite le crash.
+
+### 6.2. Tests
+- 20 / 3 → 6 (division entière, pas de virgule)
+- 10 / 0 → "Division par zéro impossible."
