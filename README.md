@@ -55,3 +55,12 @@ La multiplication utilise `imul rax, [nb2]` (multiplication signée).
 
 ### 5.1. Tests
 <!-- screenshot placeholder v5 -->
+
+## 6. v6 : division
+
+La division utilise `cqo` (sign-extension) puis `idiv qword [nb2]` (division signée).
+Le résultat est la partie entière du quotient.
+Gestion de la division par zéro avec un message "Division par zero."
+
+### 6.1. Tests
+<!-- screenshot placeholder v6 -->

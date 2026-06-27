@@ -1,4 +1,4 @@
-; calc.asm - Calculatrice (v5: + multiplication)
+; calc.asm - Calculatrice (v6: + division)
 ; nasm -f elf64 calc.asm -o calc.o && ld calc.o -o calc
 default rel
 
@@ -22,6 +22,7 @@ section .data
     res_txt  db 'Resultat : ', 0
     err_inv  db 'Saisie invalide.', 10, 0
     virgule  db ', ', 0
+    err_divzero db 'Division par zero.', 10, 0
     secret   db 'asm42'             ; mot de passe secret
     secret_len equ 5                ; longueur secret
     max_att  equ 3                  ; tentatives max
@@ -136,6 +137,8 @@ lire_deux_nombres:
     je .soustraction
     cmp byte [choix], '3'
     je .multiplication
+    cmp byte [choix], '4'
+    je .division
     mov rax, [nb1]
     call afficher_entier
     mov rsi, virgule
@@ -157,6 +160,18 @@ lire_deux_nombres:
     mov rax, [nb1]
     imul rax, [nb2]
     call afficher_entier
+    jmp .fin
+.division:
+    cmp qword [nb2], 0
+    je .div_zero
+    mov rax, [nb1]
+    cqo
+    idiv qword [nb2]
+    call afficher_entier
+    jmp .fin
+.div_zero:
+    mov rsi, err_divzero
+    call print
 .fin:
     mov rsi, newline
     call print
