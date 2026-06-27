@@ -1,4 +1,4 @@
-; calc.asm - Calculatrice (v6: + division)
+; calc.asm - Calculatrice (v7: + flottants)
 ; nasm -f elf64 calc.asm -o calc.o && ld calc.o -o calc
 default rel
 
@@ -23,6 +23,10 @@ section .data
     err_inv  db 'Saisie invalide.', 10, 0
     virgule  db ', ', 0
     err_divzero db 'Division par zéro impossible.', 10, 0
+    ; --- constantes flottants ---
+    zero     dq 0.0
+    neg_one  dq -1.0
+    dix      dq 10.0
     secret   db 'asm42'             ; mot de passe secret
     secret_len equ 5                ; longueur secret
     max_att  equ 3                  ; tentatives max
@@ -121,14 +125,14 @@ afficher_menu:
     call print
     jmp .l
 
-; Demande 2 nombres, effectue l'opération et affiche le résultat
+; Demande 2 nombres (flottants), effectue l'opération et affiche le résultat
 lire_deux_nombres:
     mov rsi, prompt_a
-    call lire_entier
-    mov [nb1], rax
+    call lire_float
+    movsd [nb1], xmm0
     mov rsi, prompt_b
-    call lire_entier
-    mov [nb2], rax
+    call lire_float
+    movsd [nb2], xmm0
     mov rsi, res_txt
     call print
     cmp byte [choix], '1'
@@ -139,35 +143,35 @@ lire_deux_nombres:
     je .multiplication
     cmp byte [choix], '4'
     je .division
-    mov rax, [nb1]
-    call afficher_entier
+    movsd xmm0, [nb1]
+    call afficher_float
     mov rsi, virgule
     call print
-    mov rax, [nb2]
-    call afficher_entier
+    movsd xmm0, [nb2]
+    call afficher_float
     jmp .fin
 .addition:
-    mov rax, [nb1]
-    add rax, [nb2]
-    call afficher_entier
+    movsd xmm0, [nb1]
+    addsd xmm0, [nb2]
+    call afficher_float
     jmp .fin
 .soustraction:
-    mov rax, [nb1]
-    sub rax, [nb2]
-    call afficher_entier
+    movsd xmm0, [nb1]
+    subsd xmm0, [nb2]
+    call afficher_float
     jmp .fin
 .multiplication:
-    mov rax, [nb1]
-    imul rax, [nb2]
-    call afficher_entier
+    movsd xmm0, [nb1]
+    mulsd xmm0, [nb2]
+    call afficher_float
     jmp .fin
 .division:
-    cmp qword [nb2], 0
+    movsd xmm0, [nb2]
+    comisd xmm0, [zero]
     je .div_zero
-    mov rax, [nb1]
-    cqo
-    idiv qword [nb2]
-    call afficher_entier
+    movsd xmm0, [nb1]
+    divsd xmm0, [nb2]
+    call afficher_float
     jmp .fin
 .div_zero:
     mov rsi, err_divzero
@@ -231,6 +235,109 @@ lire_entier:
     xor rdi, rdi
     syscall
 
+; Lit un nombre à virgule (double) depuis stdin
+; RSI = message à afficher avant la saisie
+; Retourne : xmm0 = la valeur
+lire_float:
+    push rbx
+    push rcx
+    push r8
+    push r9
+    push rsi
+    call print
+.lire:
+    call read_line
+    cmp rax, 0
+    je .eof
+    mov rsi, buf
+    xor rcx, rcx                ; signe : 0 = positif, 1 = negatif
+    cmp byte [rsi], '-'
+    jne .int_part
+    mov rcx, 1
+    inc rsi
+.int_part:
+    xor rax, rax                ; partie entiere
+.lp_int:
+    movzx rdx, byte [rsi]
+    cmp rdx, 0
+    je .no_frac
+    cmp rdx, '.'
+    je .frac_start
+    cmp rdx, '0'
+    jb .inv
+    cmp rdx, '9'
+    ja .inv
+    sub rdx, '0'
+    imul rax, rax, 10
+    add rax, rdx
+    inc rsi
+    jmp .lp_int
+.no_frac:
+    cvtsi2sd xmm0, rax
+    cmp rcx, 0
+    je .ok
+    mulsd xmm0, [neg_one]
+    jmp .ok
+.frac_start:
+    inc rsi
+    xor rdx, rdx                ; chiffres fractionnaires
+    xor r8, r8                  ; nombre de chiffres
+.lp_frac:
+    movzx rbx, byte [rsi]
+    cmp rbx, 0
+    je .done_frac
+    cmp rbx, '0'
+    jb .inv
+    cmp rbx, '9'
+    ja .inv
+    sub rbx, '0'
+    imul rdx, rdx, 10
+    add rdx, rbx
+    inc r8
+    inc rsi
+    jmp .lp_frac
+.done_frac:
+    mov rbx, rax                ; sauve partie entiere
+    mov rax, 1                  ; calcule 10^r8
+    mov r9, r8
+.pow10:
+    cmp r9, 0
+    je .pow_done
+    imul rax, rax, 10
+    dec r9
+    jmp .pow10
+.pow_done:
+    cvtsi2sd xmm0, rbx          ; partie entiere
+    cvtsi2sd xmm1, rdx          ; chiffres fractionnaires
+    cvtsi2sd xmm2, rax          ; 10^r8
+    divsd xmm1, xmm2
+    addsd xmm0, xmm1
+    cmp rcx, 0
+    je .ok
+    mulsd xmm0, [neg_one]
+.ok:
+    pop rsi
+    pop r9
+    pop r8
+    pop rcx
+    pop rbx
+    ret
+.inv:
+    mov rsi, err_inv
+    call print
+    mov rsi, [rsp]
+    call print
+    jmp .lire
+.eof:
+    pop rsi
+    pop r9
+    pop r8
+    pop rcx
+    pop rbx
+    mov rax, 60
+    xor rdi, rdi
+    syscall
+
 ; Convertit un entier en chaîne (itoa) en empilant/dépilant les chiffres
 afficher_entier:
     push rbx
@@ -267,6 +374,83 @@ afficher_entier:
     mov rsi, buf
     call print
     mov rax, rcx
+    pop rdx
+    pop rcx
+    pop rbx
+    ret
+
+; Convertit un double en chaîne et l'affiche
+; xmm0 = valeur à afficher
+afficher_float:
+    push rbx
+    push rcx
+    push rdx
+    push r8
+    push r9
+    mov rdi, buf
+    movsd xmm1, xmm0
+    comisd xmm1, [zero]
+    jae .pos
+    mov byte [rdi], '-'
+    inc rdi
+    mulsd xmm1, [neg_one]
+.pos:
+    cvttsd2si rax, xmm1
+    cvtsi2sd xmm2, rax
+    subsd xmm1, xmm2
+    sub rsp, 8
+    movsd [rsp], xmm1
+    xor r8, r8
+    cmp rax, 0
+    jne .int_loop
+    mov byte [rdi], '0'
+    inc rdi
+    inc r8
+    jmp .int_end
+.int_loop:
+    xor rdx, rdx
+    mov rbx, 10
+    div rbx
+    add dl, '0'
+    push rdx
+    inc r8
+    cmp rax, 0
+    jne .int_loop
+.int_write:
+    pop rax
+    mov [rdi], al
+    inc rdi
+    dec r8
+    jnz .int_write
+.int_end:
+    mov byte [rdi], '.'
+    inc rdi
+    movsd xmm1, [rsp]
+    add rsp, 8
+    mov r8, 6
+.frac_loop:
+    mulsd xmm1, [dix]
+    cvttsd2si rax, xmm1
+    cvtsi2sd xmm2, rax
+    subsd xmm1, xmm2
+    add al, '0'
+    mov [rdi], al
+    inc rdi
+    dec r8
+    jnz .frac_loop
+.strip:
+    dec rdi
+    cmp byte [rdi], '0'
+    je .strip
+    cmp byte [rdi], '.'
+    je .print
+    inc rdi
+.print:
+    mov byte [rdi], 0
+    mov rsi, buf
+    call print
+    pop r9
+    pop r8
     pop rdx
     pop rcx
     pop rbx
