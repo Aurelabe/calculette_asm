@@ -1,4 +1,4 @@
-; calc.asm - Calculatrice (v7: + flottants)
+; calc.asm - Calculatrice
 ; nasm -f elf64 calc.asm -o calc.o && ld calc.o -o calc
 default rel
 
