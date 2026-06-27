@@ -31,3 +31,11 @@ Pour l'instant on gère que les entiers, c'est plus simple. Les flottants viendr
 ### 2.2. Tests
 
 <img width="387" height="607" alt="image" src="https://github.com/user-attachments/assets/dce1f99c-ffa4-4aeb-92c9-c3d75d4f9816" />
+
+## 3. v3 : addition
+
+L'addition prend les 2 nombres, les additionne et affiche le résultat avec `add rax, [nb2]`.
+Les autres opérations (soustraction, multiplication, division) arrivent dans les versions suivantes.
+
+### 3.1. Tests
+<!-- screenshot placeholder v3 -->
