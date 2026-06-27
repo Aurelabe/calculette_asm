@@ -1,4 +1,4 @@
-; calc.asm - Calculatrice (v2: mot de passe + menu + 2 nombres)
+; calc.asm - Calculatrice (v3: + addition)
 ; nasm -f elf64 calc.asm -o calc.o && ld calc.o -o calc
 default rel
 
@@ -35,6 +35,7 @@ section .bss
 section .text
     global _start
 
+; Point d'entrée : vérifie le mot de passe, puis boucle menu + saisie
 _start:
     call check_pass
 .boucle:
@@ -44,6 +45,7 @@ _start:
     call lire_deux_nombres
     jmp .boucle
 
+; Vérification du mot de passe : 3 tentatives, comparaison longueur puis caractères
 check_pass:
     mov rcx, max_att
 .l:
@@ -94,6 +96,7 @@ check_pass:
     xor rdi, rdi
     syscall
 
+; Affiche le menu et lit le choix (1-5), redemande si invalide
 afficher_menu:
     mov rsi, menu_txt
     call print
@@ -113,32 +116,46 @@ afficher_menu:
 .inv:
     mov rsi, err_inv
     call print
+    mov rsi, menu_txt
+    call print
     jmp .l
 
+; Demande 2 nombres, effectue l'opération et affiche le résultat
 lire_deux_nombres:
     mov rsi, prompt_a
-    call print
     call lire_entier
     mov [nb1], rax
     mov rsi, prompt_b
-    call print
     call lire_entier
     mov [nb2], rax
     mov rsi, res_txt
     call print
+    cmp byte [choix], '1'
+    je .addition
     mov rax, [nb1]
     call afficher_entier
     mov rsi, virgule
     call print
     mov rax, [nb2]
     call afficher_entier
+    jmp .fin
+.addition:
+    mov rax, [nb1]
+    add rax, [nb2]
+    call afficher_entier
+.fin:
     mov rsi, newline
     call print
     ret
 
+; Convertit une chaîne en entier (atoi), gère le signe - et les erreurs
+; RSI = pointeur vers le message à afficher avant la saisie
 lire_entier:
     push rbx
     push rcx
+    push rsi
+    call print
+.lire:
     call read_line
     cmp rax, 0
     je .eof
@@ -167,22 +184,25 @@ lire_entier:
     je .ok
     neg rax
 .ok:
+    pop rsi
     pop rcx
     pop rbx
     ret
 .inv:
     mov rsi, err_inv
     call print
-    pop rcx
-    pop rbx
-    jmp lire_entier
+    mov rsi, [rsp]
+    call print
+    jmp .lire
 .eof:
+    pop rsi
     pop rcx
     pop rbx
     mov rax, 60
     xor rdi, rdi
     syscall
 
+; Convertit un entier en chaîne (itoa) en empilant/dépilant les chiffres
 afficher_entier:
     push rbx
     push rcx
@@ -223,6 +243,7 @@ afficher_entier:
     pop rbx
     ret
 
+; Lit une ligne depuis stdin, caractère par caractère, jusqu'à \n
 read_line:
     push r8
     xor r8, r8
@@ -252,6 +273,7 @@ read_line:
 
 newline db 10, 0
 
+; Affiche une chaîne terminée par 0 via syscall write
 print:
     push rdi
     push rdx
@@ -266,6 +288,7 @@ print:
     pop rdi
     ret
 
+; Retourne dans rax la longueur d'une chaîne terminée par 0
 strlen:
     xor rax, rax
 .l:
@@ -276,6 +299,7 @@ strlen:
 .fin:
     ret
 
+; Sortie du programme
 fin:
     mov rax, 60
     xor rdi, rdi
