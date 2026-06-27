@@ -70,4 +70,4 @@ Déjà, on sait que la division par zéro est impossible. `idiv`, avec un divise
 
 ### 6.2. Tests
 
-<img width="402" height="631" alt="image" src="https://github.com/user-attachments/assets/063500ff-37a6-4729-a626-d803ed42d344" />
+<img width="516" height="626" alt="image" src="https://github.com/user-attachments/assets/71ff712a-2c01-4766-9eaa-4ac1d5b9081b" />
