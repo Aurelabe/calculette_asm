@@ -47,3 +47,12 @@ La soustraction utilise `sub rax, [nb2]` pour soustraire le deuxième nombre du 
 
 ### 4.1. Tests
 <!-- screenshot placeholder v4 -->
+
+## 5. v5 : multiplication + division
+
+La multiplication utilise `imul rax, [nb2]` (multiplication signée).  
+La division utilise `cqo` puis `idiv qword [nb2]` (division signée).  
+Gestion de la division par zéro avec un message "Division par zero."
+
+### 5.1. Tests
+<!-- screenshot placeholder v5 -->
