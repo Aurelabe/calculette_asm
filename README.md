@@ -72,9 +72,6 @@ Déjà, on sait que la division par zéro est impossible. `idiv`, avec un divise
 
 <img width="516" height="626" alt="image" src="https://github.com/user-attachments/assets/71ff712a-2c01-4766-9eaa-4ac1d5b9081b" />
 
-- 20 / 3 → 6 (division entière, pas de virgule)
-- 10 / 0 → "Division par zéro impossible."
-
 ## 7. v7 : flottants
 
 Maintenant la calculatrice gère les nombres à virgule (double précision, SSE2).
@@ -90,15 +87,14 @@ Les fonctions `lire_entier` et `afficher_entier` existent toujours, mais `lire_d
 Les zéros de fin sont supprimés, sauf si le nombre est un entier (ex: "10" au lieu de "10.000000").
 
 ### 7.3. Tests
-<!-- screenshot placeholder v7 -->
+
+<img width="382" height="622" alt="image" src="https://github.com/user-attachments/assets/5fe0009a-f014-40d7-83cd-bd8c372828bf" />
 
 ## 8. Sécurité
 
 ### 8.1. Buffer overflow évité
 
 `read_line` lit un seul byte à la fois avec `syscall read` et s'arrête à 62 caractères (`cmp r8, 62`) pour ne pas dépasser le buffer de 64 octets. Si l'utilisateur tape plus de 62 caractères, le reste est ignoré.
-
-https://stackoverflow.com/questions/23497730/how-to-prevent-buffer-overflow-in-assembly
 
 ### 8.2. Validation des entrées
 
