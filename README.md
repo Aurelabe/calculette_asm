@@ -34,7 +34,7 @@ Pour l'instant on gère que les entiers, c'est plus simple. Les flottants viendr
 
 ## 3. v3 : addition
 
-L'addition prend les 2 nombres, les additionne et affiche le résultat avec `add rax, [nb2]`.
+L'addition prend les 2 nombres entrés, les additionne et affiche le résultat avec `add rax, [nb2]`.
 Les autres opérations (soustraction, multiplication, division) arrivent dans les versions suivantes.
 
 ### 3.1. Tests
