@@ -54,7 +54,8 @@ La soustraction utilise `sub rax, [nb2]` pour soustraire le deuxième nombre du 
 La multiplication utilise `imul rax, [nb2]` (multiplication signée).
 
 ### 5.1. Tests
-<!-- screenshot placeholder v5 -->
+
+<img width="397" height="617" alt="image" src="https://github.com/user-attachments/assets/f84fa921-7ac5-4354-8087-e12afb83895e" />
 
 ## 6. v6 : division
 
