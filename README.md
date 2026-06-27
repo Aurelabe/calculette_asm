@@ -39,3 +39,10 @@ Les autres opérations (soustraction, multiplication, division) arrivent dans le
 
 ### 3.1. Tests
 <!-- screenshot placeholder v3 -->
+
+## 4. v4 : soustraction
+
+La soustraction utilise `sub rax, [nb2]` pour soustraire le deuxième nombre du premier.
+
+### 4.1. Tests
+<!-- screenshot placeholder v4 -->

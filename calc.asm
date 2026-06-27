@@ -1,4 +1,4 @@
-; calc.asm - Calculatrice (v3: + addition)
+; calc.asm - Calculatrice (v4: + soustraction)
 ; nasm -f elf64 calc.asm -o calc.o && ld calc.o -o calc
 default rel
 
@@ -132,6 +132,8 @@ lire_deux_nombres:
     call print
     cmp byte [choix], '1'
     je .addition
+    cmp byte [choix], '2'
+    je .soustraction
     mov rax, [nb1]
     call afficher_entier
     mov rsi, virgule
@@ -142,6 +144,11 @@ lire_deux_nombres:
 .addition:
     mov rax, [nb1]
     add rax, [nb2]
+    call afficher_entier
+    jmp .fin
+.soustraction:
+    mov rax, [nb1]
+    sub rax, [nb2]
     call afficher_entier
 .fin:
     mov rsi, newline
