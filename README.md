@@ -66,11 +66,8 @@ Si oui, on affiche "Division par zéro impossible." au lieu de lancer l'instruct
 
 ### 6.1. Pourquoi vérifier la division par zéro ?
 
-`idiv` avec un diviseur à 0 provoque une interruption matérielle (erreur de division) et le système tue le programme. En vérifiant avant, on évite le crash.
+Déjà, on sait que la division par zéro est impossible. `idiv`, avec un diviseur à 0 provoque une interruption matérielle (erreur de division) et le système tue le programme. En vérifiant avant, on évite le crash.
 
 ### 6.2. Tests
 
 <img width="402" height="631" alt="image" src="https://github.com/user-attachments/assets/063500ff-37a6-4729-a626-d803ed42d344" />
-
-- 20 / 3 → 6 (division entière, pas de virgule)
-- 10 / 0 → "Division par zéro impossible."
