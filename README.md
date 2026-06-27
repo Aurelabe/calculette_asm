@@ -30,4 +30,4 @@ Pour l'instant on gère que les entiers, c'est plus simple. Les flottants viendr
 
 ### 2.2. Tests
 
-<img width="372" height="617" alt="image" src="https://github.com/user-attachments/assets/2f41f65e-7665-4047-9daa-2f6b01b34089" />
+<img width="387" height="607" alt="image" src="https://github.com/user-attachments/assets/dce1f99c-ffa4-4aeb-92c9-c3d75d4f9816" />
