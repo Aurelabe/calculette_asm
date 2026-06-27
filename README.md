@@ -95,3 +95,12 @@ Certains nombres comme 3.2 ne tombent pas juste en binaire (comme 1/3 = 0.333...
 
 ### 7.4. Tests
 <!-- screenshot placeholder v7 -->
+
+## 8. Sécurité
+
+Ce programme n'est pas sécurisé, c'est juste un projet pédagogique.
+
+- Le mot de passe est stocké en clair dans le binaire (`strings calc` le montre)
+- Le buffer de saisie est limité à 62 caractères (débordement évité dans `read_line`)
+- 3 tentatives max, puis le programme se verrouille
+- Pas de chiffrement, pas de hash, rien de sérieux
