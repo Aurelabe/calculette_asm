@@ -14,6 +14,7 @@ Dans le code, je vérifie la longueur du mot de passe avant comparer parce que d
 lire trop loin dans le buffer si quelqu'un tape un truc trop long.
 
 ### 1.2. Tests
+
 <img width="572" height="360" alt="image" src="https://github.com/user-attachments/assets/0f70b2ea-6204-4e49-a878-44bd74720841" />
 
 ## 2. v2 : menu + saisie de 2 nombres
@@ -28,4 +29,5 @@ Pour l'instant on gère que les entiers, c'est plus simple. Les flottants viendr
 `syscall` utilise RCX et R11 pour sauvegarder RIP et RFLAGS, donc si on se sert de RCX comme compteur, sa valeur est perdue à chaque `syscall` alors que R8, R9, R10, R12-R15 ne sont pas touchés par `syscall`.
 
 ### 2.2. Tests
-<img width="585" height="707" alt="image" src="https://github.com/user-attachments/assets/e0dd2f4e-9d90-451c-9665-4a00026a33ca" />
+
+![Uploading image.png…]()
